@@ -3,6 +3,9 @@ from django.db import models
 
 
 class Category(models.Model):
+    """
+    用户自己创建文章的类型，自己使用
+    """
     STATUS_NORMAL = 1
     STATUS_DELETE = 0
     STATUS_CHOICES = [
@@ -19,6 +22,9 @@ class Category(models.Model):
     class Meta:
         verbose_name = verbose_name_plural = '分类'
 
+    def __str__(self):
+        return self.name
+
 
 class Tag(models.Model):
     STATUS_NORMAL = 1
@@ -34,6 +40,9 @@ class Tag(models.Model):
 
     class Meta:
         verbose_name = verbose_name_plural = '标签'
+
+    def __str__(self):
+        return self.name
 
 
 class Post(models.Model):
@@ -56,5 +65,8 @@ class Post(models.Model):
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
     class Meta:
-        verbose_name = verbose_name_plural = '标签'
+        verbose_name = verbose_name_plural = '文章'
         ordering = ['-id']
+
+    def __str__(self):
+        return self.title
