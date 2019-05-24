@@ -23,10 +23,10 @@ from blog.views import post_list, post_detail, links
 
 urlpatterns = [
     url('^$', post_list),
-    url('^category/(?P<category_id>\d+)/$', post_list),
-    url('^tag/(?P<tag_id>\d+)/$', post_list),
-    url('^post/(?P<post_id>\d+).html$', post_detail),
-    url('^links/$', links),
+    url('^category/(?P<category_id>\d+)/$', post_list, name='category-list'),
+    url('^tag/(?P<tag_id>\d+)/$', post_list, name='tag-list'),
+    url('^post/(?P<post_id>\d+).html$', post_detail, name='post-detail'),
+    url('^links/$', links, name='links'),
 
     # admin
     url(r'^admin/', admin.site.urls),

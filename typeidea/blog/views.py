@@ -13,7 +13,7 @@ def post_list(request, category_id=None, tag_id=None):
     elif category_id:
         posts, category = Post.get_by_category(category_id)
     else:
-        posts = Post.latest_posts()
+        posts = Post.normal_posts()
 
     context = {
         'tag': tag,

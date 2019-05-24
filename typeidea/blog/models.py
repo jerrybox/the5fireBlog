@@ -84,6 +84,9 @@ class Post(models.Model):
     owner = models.ForeignKey(User, verbose_name='作者')
     created_time = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
 
+    pv = models.PositiveIntegerField(default=1)
+    uv = models.PositiveIntegerField(default=1)
+
     class Meta:
         verbose_name = verbose_name_plural = '文章'
         ordering = ['-id']
@@ -100,7 +103,6 @@ class Post(models.Model):
             posts = []
         else:
             posts = tag.post_set.filter(status=Post.STATUS_NORMAL).select_related('owner', 'category')
-
         return posts, tag
 
     @staticmethod
@@ -108,13 +110,20 @@ class Post(models.Model):
         try:
             category = Category.objects.get(id=category_id)
         except Category.DoesNotExist:
-            tag = None
+            category = None
             posts = []
         else:
             posts = category.post_set.filter(status=Post.STATUS_NORMAL).select_related('owner', 'category')
-
         return posts, category
 
     @classmethod
-    def latest_posts(cls):
-        return cls.objects.filter(status=cls.STATUS_NORMAL).select_related('owner', 'category')
+    def normal_posts(cls):
+        return cls.objects.filter(status=cls.STATUS_NORMAL)
+
+    @classmethod
+    def latest_posts(cls, num=3):
+        return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-created_time')[:num]
+
+    @classmethod
+    def hot_posts(cls):
+        return cls.objects.filter(status=cls.STATUS_NORMAL).order_by('-pv')

@@ -1,38 +1,21 @@
-{% extends "../base.html"%}
-
-{% block body %}
-<div>
-    顶部分类:
-    {% for nav in navs %}
-    <a href="/category/{{ nav.id }}/">{{ nav.name }}</a>
-    {% endfor %}
-</div>
-<hr>
-
-{% if post %}
-<h1>{{ post.title }}</h1>
-<div>
-    <span>作者： {{ post.owner }}</span>
-    <span>分类： {{ post.category.name }}</span>
-</div>
-<hr>
-<p>
-    {{ post.content }}
-</p>
-{% endif %}
+{% extends "./base.html"%}
 
 
-<div>底部分类：
-    {% for category in categories %}
-    <a href="/category/{{ category.id }}/">{{ category.name }}</a>
-    {% endfor %}
-</div>
+{% block title %}
+    {{ post.title }}
+{% endblock %}
 
 
-<div>侧边栏：
-    {% for sidebar in sidebars %}
-    <h4>{{ sidebar.title }}</h4>
-    {{ sidebar.content }}
-    {% endfor %}
-</div>
+{% block main %}
+    {% if post %}
+    <h1>{{ post.title }}</h1>
+    <div>
+        <span>作者： {{ post.owner }}</span>
+        <span>分类： {{ post.category.name }}</span>
+    </div>
+
+    <p>
+        {{ post.content }}
+    </p>
+    {% endif %}
 {% endblock %}
