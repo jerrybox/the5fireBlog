@@ -18,14 +18,22 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from .custom_site import custom_site
-from blog.views import post_list, post_detail, links
+from blog.views import (
+    post_list,
+    post_detail,
+    links,
+    IndexView,
+    PostDetailView,
+    CategoryView,
+    TagView,
+    )
 
 
 urlpatterns = [
-    url('^$', post_list),
-    url('^category/(?P<category_id>\d+)/$', post_list, name='category-list'),
-    url('^tag/(?P<tag_id>\d+)/$', post_list, name='tag-list'),
-    url('^post/(?P<post_id>\d+).html$', post_detail, name='post-detail'),
+    url('^$', IndexView.as_view()),
+    url('^category/(?P<category_id>\d+)/$', CategoryView.as_view(), name='category-list'),
+    url('^tag/(?P<tag_id>\d+)/$', TagView.as_view(), name='tag-list'),
+    url('^post/(?P<post_id>\d+).html$', PostDetailView.as_view(), name='post-detail'),
     url('^links/$', links, name='links'),
 
     # admin
