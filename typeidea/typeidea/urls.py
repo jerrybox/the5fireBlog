@@ -19,13 +19,14 @@ from django.contrib import admin
 
 from .custom_site import custom_site
 from blog.views import (
-    post_list,
-    post_detail,
-    links,
     IndexView,
     PostDetailView,
     CategoryView,
     TagView,
+    SearchView,
+    AuthorView,
+    LinkListView,
+    CommentView,
     )
 
 
@@ -34,7 +35,17 @@ urlpatterns = [
     url('^category/(?P<category_id>\d+)/$', CategoryView.as_view(), name='category-list'),
     url('^tag/(?P<tag_id>\d+)/$', TagView.as_view(), name='tag-list'),
     url('^post/(?P<post_id>\d+).html$', PostDetailView.as_view(), name='post-detail'),
-    url('^links/$', links, name='links'),
+
+    url('^author/(?P<owner_id>\d+)/$', AuthorView.as_view(), name='author'),
+
+    #
+    url('^links/$', LinkListView.as_view(), name='links'),
+
+    #
+    url('^comment/$', CommentView.as_view(), name='comment'),
+
+    # search
+    url('^search/$', SearchView.as_view(), name='search'),
 
     # admin
     url(r'^admin/', admin.site.urls),

@@ -1,8 +1,11 @@
+from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView, ListView
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import DetailView, ListView, TemplateView
 
-from config.models import SideBar
+from config.models import SideBar, Link
+from comment.models import Comment
+from comment.forms import CommentForm
 from .models import Tag, Post, Category
 
 
@@ -16,11 +19,40 @@ class CommonViewMixin:
         return context
 
 
+class LinkListView(CommonViewMixin, ListView):
+    queryset = Link.objects.filter(status=Link.STATUS_NORMAL)
+    template_name = 'config/links.html'
+    context_object_name = 'link_list'
+
+
 class IndexView(CommonViewMixin, ListView):
     model = Post
     paginate_by = 2
     context_object_name = 'posts'
     template_name = 'blog/list.html'
+
+
+class SearchView(IndexView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'keyword': self.request.GET.get('keyword', ''),
+        })
+        return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        keyword = self.request.GET.get('keyword', '')
+        if not keyword:
+            return queryset
+        return queryset.filter(Q(title__icontains=keyword) | Q(desc__icontains=keyword))
+
+
+class AuthorView(IndexView):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        author_id = self.kwargs.get('owner_id')
+        return queryset.filter(owner__id=author_id)
 
 
 class CategoryView(IndexView):
@@ -61,41 +93,35 @@ class PostDetailView(CommonViewMixin, DetailView):
     pk_url_kwarg = 'post_id'
     template_name = 'blog/detail.html'
 
-
-# Function-based view
-def post_list(request, category_id=None, tag_id=None):
-    tag = None
-    category = None
-    if tag_id:
-        posts, tag = Post.get_by_tag(tag_id)
-    elif category_id:
-        posts, category = Post.get_by_category(category_id)
-    else:
-        posts = Post.normal_posts()
-
-    context = {
-        'tag': tag,
-        'category': category,
-        'posts': posts,
-        'sidebars': SideBar.get_all()
-    }
-    context.update(Category.get_navs())
-    return render(request, 'blog/list.html', context=context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'comment_form': CommentForm,
+            'comment_list': Comment.get_by_target(self.request.path)
+        })
+        return context
 
 
-def post_detail(request, post_id):
-    try:
-        post = Post.objects.get(id=post_id)
-    except Post.DoesNotExist:
-        post = None
+class CommentView(TemplateView):
+    http_method_names = ['post']
+    template_name = 'comment/result.html'
 
-    context = {
-        'post': post,
-        'sidebars': SideBar.get_all()
-    }
-    context.update(Category.get_navs())
-    return render(request, 'blog/detail.html', context=context)
+    def post(self, request, *args, **kwargs):
+        comment_form = CommentForm(request.POST)
+        target = request.POST.get('target')
 
+        if comment_form.is_valid():
+            instance = comment_form.save(commit=False)
+            instance.target = target
+            instance.save()
+            succeed = True
+            return redirect(target)
+        else:
+            succeed = False
 
-def links(request):
-    pass
+        context = {
+            'succeed': succeed,
+            'form': comment_form,
+            'target': target,
+        }
+        return self.render_to_response(context)

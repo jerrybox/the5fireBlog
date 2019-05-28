@@ -11,6 +11,7 @@
     }
     </style>
 </head>
+<body>
 
 <div class="container head">
 
@@ -27,8 +28,8 @@
 
         </ul>
 
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'search' %}">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="keyword" value="{{ keyword }}">
             <button class="btn btn-outline-success" type="submit">搜索</button>
         </form>
 
@@ -77,7 +78,8 @@
         <span class="text-muted">Power by Typeidea@the5fire</span>
     </div>
 </footer>
-<body>
+
+</body>
 
 
 </html>
