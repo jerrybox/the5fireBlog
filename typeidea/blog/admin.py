@@ -10,7 +10,11 @@ from typeidea.custom_site import custom_site
 from typeidea.base_admin import BaseOwnerAdmin
 
 
-@admin.register(LogEntry, site=custom_site)
+# 为了方便操作后台，去掉只显示当前用户的文章限制
+BaseOwnerAdmin = admin.ModelAdmin
+
+
+@admin.register(LogEntry)
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = ('object_repr', 'object_id', 'action_flag', 'user', 'change_message')
 
@@ -37,7 +41,7 @@ class PostInline(admin.TabularInline):
     model = Post
 
 
-@admin.register(Category, site=custom_site)
+@admin.register(Category)
 class CategoryAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'is_nav', 'created_time', 'owner', 'post_count')
     fields = ('name', 'status', 'is_nav')
@@ -54,14 +58,14 @@ class CategoryAdmin(BaseOwnerAdmin):
     post_count.short_description = '文章数量'
 
 
-@admin.register(Tag, site=custom_site)
+@admin.register(Tag)
 class TagAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'created_time', 'owner')
     fields = ('name', 'status')
     readonly_fields = ('owner',)
 
 
-@admin.register(Post, site=custom_site)
+@admin.register(Post)
 class PostAdmin(BaseOwnerAdmin):
     list_display = ('title', 'category', 'status', 'created_time', 'owner', 'operator')
     list_display_links = []
@@ -94,7 +98,7 @@ class PostAdmin(BaseOwnerAdmin):
     def operator(self, obj):
         return format_html(
             '<a href={}>编辑</a>'.format(
-                reverse('custom_site:blog_post_change', args=(obj.id,))
+                reverse('admin:blog_post_change', args=(obj.id,))
             )
         )
     operator.short_description = '操作'
