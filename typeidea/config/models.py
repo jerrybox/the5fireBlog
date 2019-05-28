@@ -86,5 +86,5 @@ class SideBar(models.Model):
             context = {
                 'comments':comments,
             }
-            result = render_to_string('config/blocks/sidebar_comment.html', context=context)
+            result = render_to_string('config/blocks/sidebar_comments.html', context=context)
         return result

@@ -34,3 +34,8 @@ DEBUG_TOOLBAR_CONFIG = {
     "JQUERY_URL":"https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js",
     "SHOW_COLLAPSED": True,
 }
+
+
+# 通过django-debug-toolbar发现在这里修改THEME不起作用
+THEME = 'bootstrap'
+
