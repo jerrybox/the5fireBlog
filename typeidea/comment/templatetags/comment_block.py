@@ -1,3 +1,7 @@
+"""
+这个文件必须放在templatetags文件夹下
+参考文档：https://docs.djangoproject.com/en/2.2/topics/templates/
+"""
 from django import template
 
 from comment.forms import CommentForm

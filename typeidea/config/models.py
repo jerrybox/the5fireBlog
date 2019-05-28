@@ -82,7 +82,7 @@ class SideBar(models.Model):
             }
             result = render_to_string('config/blocks/sidebar_posts.html', context=context)
         elif self.display_type == self.DISPLAY_COMMENT:
-            comments = Comment.objects.filter(status=Comment.STATUS_NORMAL)
+            comments = Comment.objects.filter(status=Comment.STATUS_NORMAL).order_by('-created_time')[-2:]
             context = {
                 'comments':comments,
             }
