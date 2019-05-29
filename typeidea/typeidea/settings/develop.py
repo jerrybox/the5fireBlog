@@ -35,7 +35,12 @@ DEBUG_TOOLBAR_CONFIG = {
     "SHOW_COLLAPSED": True,
 }
 
-
 # 通过django-debug-toolbar发现在这里修改THEME不起作用
 THEME = 'bootstrap'
 
+# 如果配置了DummyCache缓存， cache.get(key)是获取不到任何缓存值的，通过pv，uv，及django-debug-toolbar cache可以看出来
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+#     }
+# }
