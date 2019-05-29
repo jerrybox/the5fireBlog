@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.sitemaps import views as sitemap_views
 
 from .custom_site import custom_site
 from blog.views import (
@@ -28,6 +29,8 @@ from blog.views import (
     LinkListView,
     CommentView,
     )
+from blog.rss import LatestPostFeed
+from blog.sitemap import PostSitemap
 
 
 urlpatterns = [
@@ -50,6 +53,10 @@ urlpatterns = [
     # admin
     url(r'^admin/', admin.site.urls),
     url(r'^custom_admin/', custom_site.urls),
+
+    # rss and sitemap
+    url('^rss|feed/', LatestPostFeed(), name='rss'),
+    url('^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}})
 ]
 
 if settings.DEBUG:

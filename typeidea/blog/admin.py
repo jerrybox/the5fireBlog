@@ -79,6 +79,7 @@ class PostAdmin(BaseOwnerAdmin):
     actions_on_bottom = True
 
     save_on_top = True
+    filter_horizontal = ('tag',)
 
     fieldsets = (
         ('基础配置', {
