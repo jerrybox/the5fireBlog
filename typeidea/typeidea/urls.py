@@ -18,6 +18,8 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
 
+import xadmin
+
 from .custom_site import custom_site
 from blog.views import (
     IndexView,
@@ -56,7 +58,10 @@ urlpatterns = [
 
     # rss and sitemap
     url('^rss|feed/', LatestPostFeed(), name='rss'),
-    url('^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}})
+    url('^sitemap\.xml$', sitemap_views.sitemap, {'sitemaps': {'posts': PostSitemap}}),
+
+    # xadmin
+    url(r'^xadmin/', xadmin.site.urls, name='xadmin'),
 ]
 
 if settings.DEBUG:

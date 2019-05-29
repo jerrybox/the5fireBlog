@@ -7,3 +7,6 @@
 ## Django 知识
 
 
+## xadmin
+pip install https://github.com/the5fire/django-xadmin/archive/0.6.1.tar.gz
+

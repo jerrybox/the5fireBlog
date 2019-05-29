@@ -1,5 +1,6 @@
--i http://pypi.doubanio.com/simple/
+-i https://pypi.doubanio.com/simple/
 django~=1.11
 django-debug-toolbar==1.9.1
 mistune==0.8.4
+-e https://github.com/the5fire/django-xadmin/archive/0.6.1.tar.gz
 -e .

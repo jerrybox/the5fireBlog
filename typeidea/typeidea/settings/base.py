@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'config',
     'comment',
     'typeidea',
+    'xadmin',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
